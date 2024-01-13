@@ -1,15 +1,15 @@
 {
   "name": "bun-console-test",
   "module": "index.ts",
-  "type": "module",
-  "scripts": {
-    "build": "bun build"
-  },
   "devDependencies": {
     "bun-types": "latest",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
-  }
+  },
+  "scripts": {
+    "build": "bun build"
+  },
+  "type": "module"
 }
