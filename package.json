@@ -11,8 +11,5 @@
   "scripts": {
     "build": "bun build"
   },
-  "type": "module",
-  "dependencies": {
-    "magic-string": "^0.30.5"
-  }
+  "type": "module"
 }
