@@ -24,13 +24,18 @@ function flattenExpression(node: ts.CallExpression): string {
   return tokens.join('.');
 }
 
+function isCallStatement(node: ts.Node): node is ts.ExpressionStatement {
+  return ts.isExpressionStatement(node) && ts.isCallExpression(node.expression);
+}
+
 const stripTransformer: ts.TransformerFactory<ts.SourceFile> = (
   ctx: ts.TransformationContext
 ) => {
   return (source: ts.SourceFile) => {
     const walk = (node: ts.Node) => {
-      if (ts.isCallExpression(node)) {
-        const flattened = flattenExpression(node);
+      if (isCallStatement(node)) {
+        const callExpr = node.expression as ts.CallExpression;
+        const flattened = flattenExpression(callExpr);
 
         return stripPatterns.some((pattern) => pattern.test(flattened))
           ? ctx.factory.createIdentifier('')
@@ -47,8 +52,6 @@ const stripTransformer: ts.TransformerFactory<ts.SourceFile> = (
     return ts.visitNode(source, walk) as ts.SourceFile;
   };
 };
-
-function stripOrphanedSemicolons(output: string) {}
 
 (() => {
   const source = ts.createSourceFile(
