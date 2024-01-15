@@ -1,11 +1,19 @@
 import ts from 'typescript';
 
-const stripPatterns = [/console\.\w?/];
+const stripPatterns = [/console\.\w?/, /assert\.\w?/];
 
-const printer = ts.createPrinter({
-  newLine: ts.NewLineKind.LineFeed,
-  omitTrailingSemicolon: true,
-});
+function getScriptKind(filename: string): ts.ScriptKind {
+  const ext = filename.split('.').pop() as string;
+
+  switch (ext) {
+    case 'jsx':
+      return ts.ScriptKind.JSX;
+    case 'tsx':
+      return ts.ScriptKind.TSX;
+    default:
+      return ext.startsWith('js') ? ts.ScriptKind.JS : ts.ScriptKind.TS;
+  }
+}
 
 function flattenExpression(node: ts.CallExpression): string {
   const tokens: string[] = [];
@@ -53,23 +61,24 @@ const stripTransformer: ts.TransformerFactory<ts.SourceFile> = (
   };
 };
 
-(() => {
-  const source = ts.createSourceFile(
+export function stripDebuggers(text: string, path: string): string {
+  const sourceFile = ts.createSourceFile(
     '',
-    `const a = 'Hello World';
-const b = 'c'; console.log('aaa'); console.table({ foo: 'bar' });
-console.log('cccccccc');`,
-    ts.ScriptTarget.ES2015,
+    text,
+    ts.ScriptTarget.ESNext,
     false,
-    ts.ScriptKind.TS
+    getScriptKind(path)
   );
 
-  const result = ts.transform(source, [stripTransformer]);
-  const transformed = printer.printNode(
+  const printer = ts.createPrinter({
+    newLine: ts.NewLineKind.LineFeed,
+    omitTrailingSemicolon: true,
+  });
+
+  const transformer = ts.transform(sourceFile, [stripTransformer]);
+  return printer.printNode(
     ts.EmitHint.Unspecified,
-    result.transformed[0],
-    source
+    transformer.transformed[0],
+    sourceFile
   );
-
-  console.log(transformed);
-})();
+}
