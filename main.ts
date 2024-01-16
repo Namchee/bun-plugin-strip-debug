@@ -1,6 +1,9 @@
 import ts from 'typescript';
 
-const stripPatterns = [/console\.\w?/, /assert\.\w?/];
+export interface PluginConfig {
+  debugger: boolean;
+  exclude: string[];
+}
 
 function getScriptKind(filename: string): ts.ScriptKind {
   const ext = filename.split('.').pop() as string;
@@ -15,7 +18,7 @@ function getScriptKind(filename: string): ts.ScriptKind {
   }
 }
 
-function flattenExpression(node: ts.CallExpression): string {
+function flattenExpression(node: ts.CallExpression): string[] {
   const tokens: string[] = [];
 
   let expr = node.expression;
@@ -29,39 +32,53 @@ function flattenExpression(node: ts.CallExpression): string {
     tokens.unshift(expr.escapedText.toString());
   }
 
-  return tokens.join('.');
+  return tokens;
 }
 
 function isCallStatement(node: ts.Node): node is ts.ExpressionStatement {
   return ts.isExpressionStatement(node) && ts.isCallExpression(node.expression);
 }
 
-const stripTransformer: ts.TransformerFactory<ts.SourceFile> = (
-  ctx: ts.TransformationContext
-) => {
-  return (source: ts.SourceFile) => {
-    const walk = (node: ts.Node) => {
-      if (isCallStatement(node)) {
-        const callExpr = node.expression as ts.CallExpression;
-        const flattened = flattenExpression(callExpr);
+function shouldStrip(flatExpr: string[], config: PluginConfig): boolean {
+  if (flatExpr[0] !== 'console') {
+    return false;
+  }
 
-        return stripPatterns.some((pattern) => pattern.test(flattened))
-          ? ctx.factory.createIdentifier('')
-          : node;
-      }
+  return config.exclude && !config.exclude.includes(flatExpr[1]);
+}
 
-      if (ts.isDebuggerStatement(node)) {
-        return ctx.factory.createIdentifier('');
-      }
+function createStripTransformer(
+  config: PluginConfig
+): ts.TransformerFactory<ts.SourceFile> {
+  return (ctx: ts.TransformationContext) => {
+    return (source: ts.SourceFile) => {
+      const walk = (node: ts.Node) => {
+        if (isCallStatement(node)) {
+          const callExpr = node.expression as ts.CallExpression;
+          const flattened = flattenExpression(callExpr);
 
-      return ts.visitEachChild(node, walk, ctx);
+          return shouldStrip(flattened, config)
+            ? ctx.factory.createIdentifier('')
+            : node;
+        }
+
+        if (ts.isDebuggerStatement(node)) {
+          return config.debugger ? ctx.factory.createIdentifier('') : node;
+        }
+
+        return ts.visitEachChild(node, walk, ctx);
+      };
+
+      return ts.visitNode(source, walk) as ts.SourceFile;
     };
-
-    return ts.visitNode(source, walk) as ts.SourceFile;
   };
-};
+}
 
-export function stripDebuggers(text: string, path: string): string {
+export function stripDebuggers(
+  text: string,
+  path: string,
+  config: PluginConfig
+): string {
   const sourceFile = ts.createSourceFile(
     '',
     text,
@@ -74,6 +91,8 @@ export function stripDebuggers(text: string, path: string): string {
     newLine: ts.NewLineKind.LineFeed,
     omitTrailingSemicolon: true,
   });
+
+  const stripTransformer = createStripTransformer(config);
 
   const transformer = ts.transform(sourceFile, [stripTransformer]);
   return printer.printNode(
