@@ -10,7 +10,7 @@ export function stripDebug(
   config: PluginConfig = { exclude: [], debugger: true }
 ): BunPlugin {
   return {
-    name: 'strip',
+    name: 'strip-console',
     setup(build) {
       build.onLoad(
         {

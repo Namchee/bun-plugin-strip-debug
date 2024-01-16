@@ -1,3 +1,32 @@
-# bun-console-test
+# bun-plugin-strip-console
 
-Testing Bun build removal of console statements. It doesn't remove it, even when minified.
+Strip `console.*` and `debugger` statements from your `Bun.build` output.
+
+## Usage
+
+```ts
+import { stripDebug } from '@namchee/bun-plugin-strip-console';
+
+Bun.build({
+  entrypoints: ['<your_entrypoint>'],
+  outdir: '<your_outdir>',
+  plugins: [stripDebug()],
+});
+
+```
+
+## Options
+
+| Name | Default | Description |
+| ---- | ------- | ----------- |
+| foo  |         |             |
+
+## Task List
+
+- [x] Working PoC
+- [x] Configuration system
+- [ ] Faithful to directory's `tsconfig.json`
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE)
