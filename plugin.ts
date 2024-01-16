@@ -6,7 +6,9 @@ import { PluginConfig, stripDebuggers } from './main';
 const filePattern =
   /^(?!.*\.(spec|test)\.(js|ts|tsx|jsx|mjs|cjs|mts|cts)$).*\.(js|ts|tsx|jsx|mjs|cjs|mts|cts)$/;
 
-export function stripDebug(config: PluginConfig): BunPlugin {
+export function stripDebug(
+  config: PluginConfig = { exclude: [], debugger: true }
+): BunPlugin {
   return {
     name: 'strip',
     setup(build) {
