@@ -1,8 +1,8 @@
 import ts from 'typescript';
 
 export interface PluginConfig {
-  debugger: boolean;
-  exclude: string[];
+  debugger?: boolean;
+  exclude?: string[];
 }
 
 function getScriptKind(filename: string): ts.ScriptKind {
@@ -44,7 +44,7 @@ function shouldStrip(flatExpr: string[], config: PluginConfig): boolean {
     return false;
   }
 
-  return config.exclude && !config.exclude.includes(flatExpr[1]);
+  return !!config.exclude && !config.exclude.includes(flatExpr[1]);
 }
 
 function createStripTransformer(
