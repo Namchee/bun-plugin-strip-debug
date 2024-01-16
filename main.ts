@@ -1,5 +1,7 @@
 import ts from 'typescript';
 
+import { basename } from 'node:path';
+
 export interface PluginConfig {
   debugger?: boolean;
   exclude?: string[];
@@ -44,7 +46,7 @@ function shouldStrip(flatExpr: string[], config: PluginConfig): boolean {
     return false;
   }
 
-  return !!config.exclude && !config.exclude.includes(flatExpr[1]);
+  return config.exclude ? !config.exclude.includes(flatExpr[1]) : true;
 }
 
 function createStripTransformer(
@@ -80,7 +82,7 @@ export function stripDebuggers(
   config: PluginConfig
 ): string {
   const sourceFile = ts.createSourceFile(
-    '',
+    basename(path),
     text,
     ts.ScriptTarget.ESNext,
     false,
