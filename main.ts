@@ -3,9 +3,16 @@ import ts from 'typescript';
 import { basename } from 'node:path';
 
 export interface PluginConfig {
+  tsconfigPath?: string;
   debugger?: boolean;
   exclude?: string[];
 }
+
+interface CompilerOptions {
+  target: ts.ScriptTarget.ES5;
+}
+
+const targetMap = {};
 
 function getScriptKind(filename: string): ts.ScriptKind {
   const ext = filename.split('.').pop() as string;
@@ -76,15 +83,39 @@ function createStripTransformer(
   };
 }
 
-export function stripDebuggers(
+async function getCompilerOptions(
+  sourcePath?: string
+): Promise<ts.CompilerOptions> {
+  try {
+    const path = Bun.resolveSync(
+      sourcePath || './tsconfig.json',
+      process.cwd()
+    );
+    console.log(path);
+    const text = await Bun.file(path).text();
+
+    return ts.convertCompilerOptionsFromJson(
+      undefined,
+      process.cwd(),
+      sourcePath
+    ).options;
+  } catch (err) {
+    return ts.getDefaultCompilerOptions();
+  }
+}
+
+export async function stripDebuggers(
   text: string,
   path: string,
   config: PluginConfig
-): string {
+): Promise<string> {
+  const compilerOptions = await getCompilerOptions(config.tsconfigPath);
+  console.log(compilerOptions);
+
   const sourceFile = ts.createSourceFile(
     basename(path),
     text,
-    ts.ScriptTarget.ESNext,
+    compilerOptions.target || ts.ScriptTarget.ESNext,
     false,
     getScriptKind(path)
   );
@@ -96,7 +127,11 @@ export function stripDebuggers(
 
   const stripTransformer = createStripTransformer(config);
 
-  const transformer = ts.transform(sourceFile, [stripTransformer]);
+  const transformer = ts.transform(
+    sourceFile,
+    [stripTransformer],
+    compilerOptions
+  );
   return printer.printNode(
     ts.EmitHint.Unspecified,
     transformer.transformed[0],
