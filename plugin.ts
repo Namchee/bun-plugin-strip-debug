@@ -1,5 +1,7 @@
 import type { BunPlugin } from 'bun';
 
+import { resolve } from 'node:path';
+
 import { PluginConfig, stripDebuggers } from './main';
 
 // filter out non-test files
@@ -10,7 +12,7 @@ export function stripDebug(
   config: PluginConfig = {
     exclude: [],
     debugger: true,
-    tsconfigPath: './tsconfig.json',
+    tsconfigPath: resolve(process.cwd(), './tsconfig.json'),
   }
 ): BunPlugin {
   return {

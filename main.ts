@@ -1,18 +1,12 @@
 import ts from 'typescript';
 
-import { basename } from 'node:path';
+import { basename, resolve } from 'node:path';
 
 export interface PluginConfig {
   tsconfigPath?: string;
   debugger?: boolean;
   exclude?: string[];
 }
-
-interface CompilerOptions {
-  target: ts.ScriptTarget.ES5;
-}
-
-const targetMap = {};
 
 function getScriptKind(filename: string): ts.ScriptKind {
   const ext = filename.split('.').pop() as string;
@@ -87,18 +81,12 @@ async function getCompilerOptions(
   sourcePath?: string
 ): Promise<ts.CompilerOptions> {
   try {
-    const path = Bun.resolveSync(
-      sourcePath || './tsconfig.json',
-      process.cwd()
-    );
-    console.log(path);
-    const text = await Bun.file(path).text();
+    sourcePath = sourcePath || resolve(process.cwd(), './tsconfig.json');
+    const text = await Bun.file(sourcePath).text();
+    const result = ts.parseConfigFileTextToJson('', text);
 
-    return ts.convertCompilerOptionsFromJson(
-      undefined,
-      process.cwd(),
-      sourcePath
-    ).options;
+    return ts.convertCompilerOptionsFromJson(result.config.compilerOptions, '')
+      .options;
   } catch (err) {
     return ts.getDefaultCompilerOptions();
   }
@@ -110,7 +98,6 @@ export async function stripDebuggers(
   config: PluginConfig
 ): Promise<string> {
   const compilerOptions = await getCompilerOptions(config.tsconfigPath);
-  console.log(compilerOptions);
 
   const sourceFile = ts.createSourceFile(
     basename(path),
