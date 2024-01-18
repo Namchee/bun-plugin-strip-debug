@@ -25,7 +25,7 @@ Bun.build({
 
 - [x] Working PoC
 - [x] Configuration system
-- [ ] Faithful to directory's `tsconfig.json`
+- [x] Faithful to directory's `tsconfig.json`
 
 ## License
 
