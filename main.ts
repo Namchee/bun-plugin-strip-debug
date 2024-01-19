@@ -24,11 +24,29 @@ function getScriptKind(filename: string): ts.ScriptKind {
 function flattenExpression(node: ts.CallExpression): string[] {
   const tokens: string[] = [];
 
-  let expr = node.expression;
-  while (expr && ts.isPropertyAccessExpression(expr)) {
-    tokens.unshift(expr.name.escapedText.toString());
+  let expr: ts.Expression = node.expression;
+  while (expr) {
+    switch (expr.kind) {
+      case ts.SyntaxKind.PropertyAccessExpression: {
+        tokens.unshift(
+          (expr as ts.PropertyAccessExpression).name.escapedText.toString()
+        );
+        break;
+      }
+      case ts.SyntaxKind.ElementAccessExpression:
+        const elementExpr = expr as ts.ElementAccessExpression;
+        if (ts.isStringLiteral(elementExpr.argumentExpression)) {
+          tokens.unshift(
+            (elementExpr.argumentExpression as ts.StringLiteral).text
+          );
+        }
+    }
 
-    expr = expr.expression;
+    if ('expression' in expr) {
+      expr = expr.expression as ts.Expression;
+    } else {
+      break;
+    }
   }
 
   if (ts.isIdentifier(expr)) {

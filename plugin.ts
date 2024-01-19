@@ -23,8 +23,8 @@ export function stripDebug(
           filter: filePattern,
         },
         async ({ path }) => {
-          const contents = await Bun.file(path).text();
-          const postProcessed = await stripDebuggers(contents, path, config);
+          const content = await Bun.file(path).text();
+          const postProcessed = await stripDebuggers(content, path, config);
 
           return {
             contents: postProcessed,
