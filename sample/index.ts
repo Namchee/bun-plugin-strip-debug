@@ -1,7 +1,3 @@
-function add(a: number, b: number): number {
-  return a + b;
-}
+const a = 3;
 
-console['log']('Hello from Bun!');
-
-add(1, 2);
+a > 3 ? console.log('b') : console.table('c');

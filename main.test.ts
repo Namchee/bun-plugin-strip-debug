@@ -91,3 +91,12 @@ test('should not strip methods that are excluded', async () => {
   expect(/console\.log/.test(result)).toBeFalse();
   expect(/console\.error/.test(result)).toBeTrue();
 });
+
+test('corner case - inline if', async () => {
+  const text = `if (DEBUG) console.log('am debuggin')`;
+
+  const path = '/a/sample.ts';
+  const result = await stripDebuggers(text, path, {});
+
+  expect(/console\.log/.test(result)).toBeFalse();
+});
