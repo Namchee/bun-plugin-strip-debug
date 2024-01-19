@@ -81,8 +81,8 @@ async function getCompilerOptions(
   sourcePath?: string
 ): Promise<ts.CompilerOptions> {
   try {
-    sourcePath = sourcePath || resolve(process.cwd(), './tsconfig.json');
-    const text = await Bun.file(sourcePath).text();
+    const path = resolve(process.cwd(), sourcePath ?? './tsconfig.json');
+    const text = await Bun.file(path).text();
     const result = ts.parseConfigFileTextToJson('', text);
 
     return ts.convertCompilerOptionsFromJson(result.config.compilerOptions, '')
