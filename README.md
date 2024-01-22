@@ -1,11 +1,11 @@
-# bun-plugin-strip-console
+# @namchee/bun-plugin-strip-debug
 
 Strip `console.*` and `debugger` statements from your `Bun.build` output.
 
 ## Usage
 
 ```ts
-import { stripDebug } from '@namchee/bun-plugin-strip-console';
+import { stripDebug } from '@namchee/bun-plugin-strip-debug';
 
 Bun.build({
   entrypoints: ['<your_entrypoint>'],
@@ -19,7 +19,7 @@ Bun.build({
 
 | Name | Default | Description |
 | ---- | ------- | ----------- |
-| foo  |         |             |
+| files  | All JS and TS files in the project directory, including the eXtended variants | Files to be processed |
 
 ## Task List
 

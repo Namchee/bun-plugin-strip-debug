@@ -8,10 +8,10 @@ import { stripDebug as stripDebugFn } from '@namchee/henshin-strip-debug';
 
 // filter out non-test files
 const filePattern =
-  '^(?!.*.(spec|test).(js|ts|tsx|jsx|mjs|cjs|mts|cts)$).*.(js|ts|tsx|jsx|mjs|cjs|mts|cts)$';
+  /^(?!.*.(spec|test).(js|ts|tsx|jsx|mjs|cjs|mts|cts)$).*.(js|ts|tsx|jsx|mjs|cjs|mts|cts)$/;
 
 interface PluginConfig {
-  files?: string;
+  files?: string | RegExp;
   exclude?: string[];
   debugger?: boolean;
   tsconfigPath?: string;
@@ -19,6 +19,7 @@ interface PluginConfig {
 
 function getCompilerOptions(sourcePath: string): ts.CompilerOptions {
   try {
+    // need a sync version of this in Bun API
     const content = readFileSync(sourcePath).toString();
     const result = ts.parseConfigFileTextToJson('', content);
 

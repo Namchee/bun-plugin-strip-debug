@@ -1,6 +1,6 @@
 {
-  "name": "bun-console-test",
-  "module": "index.ts",
+  "name": "@namchee/bun-plugin-strip-debug",
+  "module": "plugin.ts",
   "dependencies": {
     "@namchee/henshin-strip-debug": "^1.0.0",
     "typescript": "^5.3.3"
