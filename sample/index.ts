@@ -1,3 +1,10 @@
-const a = 3;
+if (process.env.NODE_ENV === 'development') {
+  console.log('imma erased');
+}
 
-a > 3 ? console.log('b') : console.table('c');
+console.log('lorem ipsum dolor sil amet');
+
+function add(a: number, b: number) {
+  debugger;
+  return a + b;
+}

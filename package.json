@@ -1,12 +1,12 @@
 {
   "name": "bun-console-test",
   "module": "index.ts",
-  "devDependencies": {
-    "bun-types": "latest",
+  "dependencies": {
+    "@namchee/henshin-strip-debug": "^1.0.0",
     "typescript": "^5.3.3"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+  "devDependencies": {
+    "bun-types": "latest"
   },
   "scripts": {
     "build": "bun build"
