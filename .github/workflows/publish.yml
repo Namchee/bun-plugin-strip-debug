@@ -1,4 +1,4 @@
-name: Run tests
+name: Publish plugin to NPM
 
 on:
   pull_request:
@@ -13,5 +13,5 @@ jobs:
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-      - name: Run test
-        run: bun test
+      - name: Build the files
+        run: bun run build
