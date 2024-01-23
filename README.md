@@ -54,6 +54,8 @@ Bun.build({
 
 ```
 
+See [sample](./sample/build.ts) for complete example.
+
 ## Options
 
 | Name           | Type       | Default                                                                           | Description                                                                                |
