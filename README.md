@@ -19,7 +19,7 @@ Bun.build({
 
 | Name | Default | Description |
 | ---- | ------- | ----------- |
-| files  | All JS and TS files in the project directory, including the eXtended variants | Files to be processed |
+| files  | All JS and TS files in the project directory, including the e**X**tended variants | List of files to be processed by the plugin |
 
 ## Task List
 

@@ -11,7 +11,7 @@ const filePattern =
   /^(?!.*.(spec|test).(js|ts|tsx|jsx|mjs|cjs|mts|cts)$).*.(js|ts|tsx|jsx|mjs|cjs|mts|cts)$/;
 
 interface PluginConfig {
-  files?: string | RegExp;
+  files?: RegExp;
   exclude?: string[];
   debugger?: boolean;
   tsconfigPath?: string;
@@ -46,7 +46,7 @@ export function stripDebug(config: PluginConfig = {}): BunPlugin {
     setup(build) {
       build.onLoad(
         {
-          filter: new RegExp(filter),
+          filter,
         },
         async ({ path }) => {
           const content = await Bun.file(path).text();
