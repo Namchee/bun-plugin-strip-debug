@@ -10,10 +10,25 @@ import { stripDebug as stripDebugFn } from '@namchee/henshin-strip-debug';
 const filePattern =
   /^(?!.*.(spec|test).(js|ts|tsx|jsx|mjs|cjs|mts|cts)$).*.(js|ts|tsx|jsx|mjs|cjs|mts|cts)$/;
 
-interface PluginConfig {
+// Plugin configuration
+export interface PluginConfig {
+  /**
+   * List of source files that should be processed
+   * 
+   * @default
+   */
   files?: RegExp;
+  /**
+   * `console` methods that shouldn't be stripped when processing a source file
+   */
   exclude?: string[];
+  /**
+   * Allows the debugger statement to be stripped
+   */
   debugger?: boolean;
+  /**
+   * Path to `tsconfig.json`
+   */
   tsconfigPath?: string;
 }
 
@@ -30,6 +45,13 @@ function getCompilerOptions(sourcePath: string): ts.CompilerOptions {
   }
 }
 
+/**
+ * Factory function for `strip-debug` plugin.
+ *
+ * @param {PluginConfig} config Plugin configuration
+ * @returns {BunPlugin} `Bun.build` plugin that strips debugging statements from
+ * source files.
+ */
 export function stripDebug(config: PluginConfig = {}): BunPlugin {
   const filter = config.files ?? filePattern;
   const tsconfigPath =

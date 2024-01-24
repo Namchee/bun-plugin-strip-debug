@@ -5,3 +5,5 @@ await Bun.build({
   minify: true,
   external: ['typescript'],
 });
+export { };
+

@@ -12,7 +12,7 @@
     "bun-types": "latest"
   },
   "scripts": {
-    "build": "bun build.ts"
+    "build": "bun build.ts && tsc --emitDeclarationOnly --outDir dist/"
   },
   "type": "module"
 }

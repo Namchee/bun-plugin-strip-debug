@@ -15,3 +15,4 @@ jobs:
           bun-version: latest
       - name: Build the files
         run: bun run build
+      - name: Publish to NPM
