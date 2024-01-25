@@ -17,5 +17,5 @@
       "bun-types" // add Bun global
     ]
   },
-  "include": ["**/*.ts"]
+  "include": ["plugin.ts", "build.ts"]
 }
