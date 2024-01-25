@@ -14,8 +14,6 @@ const filePattern =
 export interface PluginConfig {
   /**
    * List of source files that should be processed
-   * 
-   * @default
    */
   files?: RegExp;
   /**
@@ -49,6 +47,10 @@ function getCompilerOptions(sourcePath: string): ts.CompilerOptions {
  * Factory function for `strip-debug` plugin.
  *
  * @param {PluginConfig} config Plugin configuration
+ * @param {RegExp} config.files List of source files that should be processed
+ * @param {string[]} config.exclude `console` methods that shouldn't be stripped when processing a source file
+ * @param {boolean} config.debugger Allows the debugger statement to be stripped
+ * @param {string} config.tsconfigPath Path to `tsconfig.json`
  * @returns {BunPlugin} `Bun.build` plugin that strips debugging statements from
  * source files.
  */

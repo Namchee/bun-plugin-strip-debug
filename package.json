@@ -1,6 +1,23 @@
 {
   "name": "@namchee/bun-plugin-strip-debug",
-  "module": "plugin.ts",
+  "private": false,
+  "main": "./dist/plugin.js",
+  "types": "./dist/plugin.d.ts",
+  "author": {
+    "name": "Cristopher",
+    "email": "cristophernamchee12@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Namchee/bun-plugin-strip-debug"
+  },
+  "bugs": "https://github.com/Namchee/bun-plugin-strip-debug/issues",
+  "homepage": "https://github.com/Namchee/bun-plugin-strip-debug",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "@namchee/henshin-strip-debug": "^1.0.0",
     "typescript": "^5.3.3"
