@@ -26,6 +26,7 @@
     "typescript": ">= 5.0.0"
   },
   "devDependencies": {
+    "@types/bun": "^1.0.4",
     "bun-types": "latest"
   },
   "scripts": {
