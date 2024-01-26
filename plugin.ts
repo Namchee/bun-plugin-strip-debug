@@ -54,7 +54,12 @@ function getCompilerOptions(sourcePath: string): ts.CompilerOptions {
  * @returns {BunPlugin} `Bun.build` plugin that strips debugging statements from
  * source files.
  */
-export function stripDebug(config: PluginConfig = {}): BunPlugin {
+export function stripDebug(
+  config: PluginConfig = {
+    exclude: [],
+    debugger: true,
+  }
+): BunPlugin {
   const filter = config.files ?? filePattern;
   const tsconfigPath =
     config.tsconfigPath ?? resolve(process.cwd(), './tsconfig.json');

@@ -1,6 +1,6 @@
 {
   "name": "@namchee/bun-plugin-strip-debug",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "main": "./dist/plugin.js",
   "types": "./dist/plugin.d.ts",
