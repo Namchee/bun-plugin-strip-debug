@@ -3,3 +3,6 @@ sample
 build.ts
 node_modules
 bun.lockb
+
+dist/build.d.ts
+dist/tsconfig.tsbuildinfo
