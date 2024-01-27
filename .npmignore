@@ -6,3 +6,4 @@ bun.lockb
 
 dist/build.d.ts
 dist/tsconfig.tsbuildinfo
+tsconfig.json

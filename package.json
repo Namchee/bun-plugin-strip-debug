@@ -1,6 +1,6 @@
 {
   "name": "@namchee/bun-plugin-strip-debug",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": false,
   "main": "./dist/plugin.js",
   "types": "./dist/plugin.d.ts",
@@ -20,7 +20,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@namchee/henshin-strip-debug": "^1.0.0",
+    "@namchee/henshin-strip-debug": "^1.0.1",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
@@ -31,7 +31,9 @@
     "bun-types": "latest"
   },
   "scripts": {
-    "build": "bun build.ts && tsc --emitDeclarationOnly --outDir dist/"
+    "build": "bun build.ts && tsc --emitDeclarationOnly --outDir dist/",
+    "publish": "npm publish",
+    "publish:dry": "npm publish --dry-run"
   },
   "type": "module"
 }
